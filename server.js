@@ -14,12 +14,22 @@ app.use(bodyParser.json());
 
 // PostgreSQL connection setup
 const pool = new Pool({
-    user: 'postgres', // Corrected username
-    host: 'localhost',
+    user: 'bet_owner',
+    host: 'ep-wispy-frog-a5kfl7yf.us-east-2.aws.neon.tech',
     database: 'bet',
-    password: '21911157Aa.', // Ensure this is correct
+    password: '9FJR6kNimfIt', // Make sure this is a string
     port: 5432,
+    ssl: {
+        rejectUnauthorized: false, // Only for local testing with self-signed certificate
+    }
 });
+
+// Handle connection errors
+pool.on('error', (err) => {
+    console.error('Unexpected error on idle client', err);
+    process.exit(-1);
+});
+
 
 app.put('/update-match-info', async (req, res) => {
     const { outcomes, state, names, selectedBetIds } = req.body;
